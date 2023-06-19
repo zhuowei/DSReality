@@ -1,3 +1,29 @@
-PODFILE CHECKSUM: 966c01d6ecf2c77228eb7b8b12c79250f0895dc1
+PODS:
+  - DeltaCore (0.1):
+    - ZIPFoundation
+  - MelonDSDeltaCore (0.1):
+    - DeltaCore
+  - ZIPFoundation (0.9.16)
+
+DEPENDENCIES:
+  - DeltaCore (from `/Volumes/thickhd/docs/repos/DeltaCore`)
+  - MelonDSDeltaCore (from `/Volumes/thickhd/docs/repos/MelonDSDeltaCore`)
+
+SPEC REPOS:
+  trunk:
+    - ZIPFoundation
+
+EXTERNAL SOURCES:
+  DeltaCore:
+    :path: "/Volumes/thickhd/docs/repos/DeltaCore"
+  MelonDSDeltaCore:
+    :path: "/Volumes/thickhd/docs/repos/MelonDSDeltaCore"
+
+SPEC CHECKSUMS:
+  DeltaCore: 86a78ac8fb0d40190231b5fb64d109f7516de187
+  MelonDSDeltaCore: 1a9a04b91a92e214c445eea3ac597edea71316d6
+  ZIPFoundation: d170fa8e270b2a32bef9dcdcabff5b8f1a5deced
+
+PODFILE CHECKSUM: ad5918db71d561e9af120b9ca74cdf036834e7f7
 
 COCOAPODS: 1.12.1

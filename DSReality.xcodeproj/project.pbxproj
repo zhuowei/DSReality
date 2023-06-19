@@ -7,24 +7,26 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		BBADF0D0EFCC4A7FC2364189 /* Pods_DSReality.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E30C1D59376D2E5091906D02 /* Pods_DSReality.framework */; };
 		C5E32BA12A40F64E00D11A93 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E32BA02A40F64E00D11A93 /* AppDelegate.swift */; };
 		C5E32BA32A40F64E00D11A93 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E32BA22A40F64E00D11A93 /* ContentView.swift */; };
 		C5E32BA52A40F64E00D11A93 /* Experience.rcproject in Sources */ = {isa = PBXBuildFile; fileRef = C5E32BA42A40F64E00D11A93 /* Experience.rcproject */; };
 		C5E32BA72A40F65400D11A93 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C5E32BA62A40F65400D11A93 /* Assets.xcassets */; };
 		C5E32BAA2A40F65400D11A93 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C5E32BA92A40F65400D11A93 /* Preview Assets.xcassets */; };
+		EDEF972952BDDBCE32845F59 /* libPods-DSReality.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C11FAA69CE973A7E07EB31F5 /* libPods-DSReality.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		96A29DC7E9B8E3ED47FAABE9 /* Pods-DSReality.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DSReality.release.xcconfig"; path = "Target Support Files/Pods-DSReality/Pods-DSReality.release.xcconfig"; sourceTree = "<group>"; };
 		B587B1A35CDDE36DA6FB4A75 /* Pods-DSReality.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DSReality.debug.xcconfig"; path = "Target Support Files/Pods-DSReality/Pods-DSReality.debug.xcconfig"; sourceTree = "<group>"; };
+		C11FAA69CE973A7E07EB31F5 /* libPods-DSReality.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DSReality.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C55605072A40FD0C00E25804 /* DSReality.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DSReality.entitlements; sourceTree = "<group>"; };
+		C5BD57C62A4119D4008D26EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C5E32B9D2A40F64E00D11A93 /* DSReality.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DSReality.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C5E32BA02A40F64E00D11A93 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C5E32BA22A40F64E00D11A93 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		C5E32BA42A40F64E00D11A93 /* Experience.rcproject */ = {isa = PBXFileReference; lastKnownFileType = file.rcproject; path = Experience.rcproject; sourceTree = "<group>"; };
 		C5E32BA62A40F65400D11A93 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C5E32BA92A40F65400D11A93 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		E30C1D59376D2E5091906D02 /* Pods_DSReality.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DSReality.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,7 +34,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BBADF0D0EFCC4A7FC2364189 /* Pods_DSReality.framework in Frameworks */,
+				EDEF972952BDDBCE32845F59 /* libPods-DSReality.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -42,7 +44,7 @@
 		766F1D5833B46C093AF2D473 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				E30C1D59376D2E5091906D02 /* Pods_DSReality.framework */,
+				C11FAA69CE973A7E07EB31F5 /* libPods-DSReality.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -53,7 +55,6 @@
 				B587B1A35CDDE36DA6FB4A75 /* Pods-DSReality.debug.xcconfig */,
 				96A29DC7E9B8E3ED47FAABE9 /* Pods-DSReality.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -78,6 +79,8 @@
 		C5E32B9F2A40F64E00D11A93 /* DSReality */ = {
 			isa = PBXGroup;
 			children = (
+				C5BD57C62A4119D4008D26EC /* Info.plist */,
+				C55605072A40FD0C00E25804 /* DSReality.entitlements */,
 				C5E32BA02A40F64E00D11A93 /* AppDelegate.swift */,
 				C5E32BA22A40F64E00D11A93 /* ContentView.swift */,
 				C5E32BA42A40F64E00D11A93 /* Experience.rcproject */,
@@ -106,6 +109,7 @@
 				C5E32B992A40F64D00D11A93 /* Sources */,
 				C5E32B9A2A40F64D00D11A93 /* Frameworks */,
 				C5E32B9B2A40F64D00D11A93 /* Resources */,
+				4D3D789020E8CE0F16184940 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -162,6 +166,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		4D3D789020E8CE0F16184940 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-DSReality/Pods-DSReality-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-DSReality/Pods-DSReality-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-DSReality/Pods-DSReality-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		D51996DDB87F2F46E17A15DF /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -320,19 +341,24 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = DSReality/DSReality.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"DSReality/Preview Content\"";
 				DEVELOPMENT_TEAM = 3D7RY4393N;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSCameraUsageDescription = "";
+				INFOPLIST_FILE = DSReality/Info.plist;
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Camera!";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Microphone!";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UIRequiredDeviceCapabilities = arkit;
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -340,9 +366,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.worthdoingbadly.DSReality;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,6";
 			};
 			name = Debug;
 		};
@@ -352,19 +381,24 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = DSReality/DSReality.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"DSReality/Preview Content\"";
 				DEVELOPMENT_TEAM = 3D7RY4393N;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSCameraUsageDescription = "";
+				INFOPLIST_FILE = DSReality/Info.plist;
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Camera!";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Microphone!";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UIRequiredDeviceCapabilities = arkit;
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -372,9 +406,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.worthdoingbadly.DSReality;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,6";
 			};
 			name = Release;
 		};

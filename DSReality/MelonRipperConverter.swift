@@ -1,3 +1,4 @@
+import CoreGraphics
 import Foundation
 import RealityKit
 
@@ -5,10 +6,21 @@ struct Vector3i {
   let x, y, z: Int32
 }
 
+struct Vector4ui {
+  let a, b, c, d: Int32
+  func toArray() -> [Int] {
+    return [Int(a), Int(b), Int(c), Int(d)]
+  }
+}
+
 struct MelonRipperRip {
   let verts: [SIMD3<Float>]
+  let uvs: [SIMD2<Float>]
   let facesTriangle: [UInt32]
   let facesQuad: [UInt32]
+  let faceMaterialsTriangle: [UInt32]
+  let faceMaterialsQuad: [UInt32]
+  let materials: [MelonRipperMaterialArgsKey: Int]
   let vramTex: Data
   let vramPal: [UInt16]
 }
@@ -25,7 +37,7 @@ func melonRipperRipFromDumpData(dump: Data) -> MelonRipperRip {
   var verts: [SIMD3<Float>] = []
   // r, g, b, useToonHighlight
   var colors: [UInt8] = []
-  var uvs: [Float] = []
+  var uvs: [SIMD2<Float>] = []
   var facesTriangle: [UInt32] = []
   var facesQuad: [UInt32] = []
   var faceMaterialsTriangle: [UInt32] = []
@@ -39,8 +51,8 @@ func melonRipperRipFromDumpData(dump: Data) -> MelonRipperRip {
   var textureWidth = 0
   var textureHeight = 0
   // TODO(zhuowei)
-  let vramTex = Data()
-  let vramPal = [UInt16]()
+  var vramTex = Data()
+  var vramPal = [UInt16]()
   while pos < dump.count {
     let op = dump[pos..<pos + 4].toString()
     pos += 4
@@ -82,7 +94,8 @@ func melonRipperRipFromDumpData(dump: Data) -> MelonRipperRip {
         // Textures are upside down in Blender, so we flip them,
         // but that means we need to flip the T coord too.
         // zhuowei: RealityKit doesn't need to flip UVs
-        uvs += [Float(s) / 16 / Float(textureWidth), Float(t) / 16 / Float(textureHeight)]
+        uvs.append(
+          SIMD2<Float>(Float(s) / 16 / Float(textureWidth), Float(t) / 16 / Float(textureHeight)))
         if nverts == 4 {
           facesQuad.append(UInt32(vertIndex + i))
         } else {
@@ -110,14 +123,25 @@ func melonRipperRipFromDumpData(dump: Data) -> MelonRipperRip {
     case "PATR":
       pos += 4
     case "VRAM":
+      let vramMapTexture = dump.getGeneric(type: Vector4ui.self, offset: UInt(pos)).toArray()
       pos += 4 * 4
+      let vramMapTexpal =
+        dump.getGeneric(type: Vector4ui.self, offset: UInt(pos)).toArray()
+        + dump.getGeneric(type: Vector4ui.self, offset: UInt(pos)).toArray()
       pos += 4 * 8
+      var banks = [Data]()
       for _ in 0..<4 {
+        banks.append(dump[pos..<pos + (128 << 10)])
         pos += 128 << 10
       }
       for _ in 0..<6 {
+        banks.append(dump[pos..<pos + (16 << 10)])
         pos += 16 << 10
       }
+      let vramResult = loadVram(
+        banks: banks, vramMapTexture: vramMapTexture, vramMapTexpal: vramMapTexpal)
+      vramTex = vramResult.vramTex
+      vramPal = vramResult.vramPal
     case "DISP":
       pos += 4
     case "TOON":
@@ -128,8 +152,52 @@ func melonRipperRipFromDumpData(dump: Data) -> MelonRipperRip {
   }
   print("imported \(verts.count) vertices")
   return MelonRipperRip(
-    verts: verts, facesTriangle: facesTriangle, facesQuad: facesQuad, vramTex: vramTex,
+    verts: verts, uvs: uvs, facesTriangle: facesTriangle, facesQuad: facesQuad,
+    faceMaterialsTriangle: faceMaterialsTriangle, faceMaterialsQuad: faceMaterialsQuad,
+    materials: materials,
+    vramTex: vramTex,
     vramPal: vramPal)
+}
+
+struct VramLoadResult {
+  let vramTex: Data
+  let vramPal: [UInt16]
+}
+
+func loadVram(banks: [Data], vramMapTexture: [Int], vramMapTexpal: [Int]) -> VramLoadResult {
+  var vramTex = Data()
+  var vramPal = Data()
+  for i in 0..<4 {
+    let mask = vramMapTexture[i]
+    if (mask & (1 << 0)) != 0 {
+      vramTex += banks[0]
+    } else if (mask & (1 << 1)) != 0 {
+      vramTex += banks[1]
+    } else if (mask & (1 << 2)) != 0 {
+      vramTex += banks[2]
+    } else if (mask & (1 << 3)) != 0 {
+      vramTex += banks[3]
+    } else {
+      vramTex += Data(count: 128 << 10)
+    }
+  }
+  for i in 0..<8 {
+    let mask = vramMapTexpal[i]
+    if (mask & (1 << 4)) != 0 {
+      vramPal += banks[4 + (i & 3)]
+    } else if (mask & (1 << 5)) != 0 {
+      vramPal += banks[8]
+    } else if (mask & (1 << 6)) != 0 {
+      vramPal += banks[9]
+    } else {
+      vramPal += Data(count: 16 << 10)
+    }
+  }
+  var vramPalUint16 = [UInt16](repeating: 0, count: vramPal.count / 2)
+  for i in 0..<vramPalUint16.count {
+    vramPalUint16[i] = UInt16(Int(vramPal[i * 2]) | (Int(vramPal[i * 2 + 1]) << 8))
+  }
+  return VramLoadResult(vramTex: vramTex, vramPal: vramPalUint16)
 }
 
 struct MelonRipperDecodedTexture {
@@ -139,7 +207,7 @@ struct MelonRipperDecodedTexture {
   let isOpaque: Bool
 }
 
-func decodeTexture(rip: MelonRipperRip, texparam: Int, texpal: Int) -> MelonRipperDecodedTexture {
+func decodeTexture(rip: MelonRipperRip, texparam: Int, texpal: Int) -> MelonRipperDecodedTexture? {
   var texpal = texpal
 
   var color = [UInt16]()
@@ -154,6 +222,8 @@ func decodeTexture(rip: MelonRipperRip, texparam: Int, texpal: Int) -> MelonRipp
   let vramPal = rip.vramPal
 
   switch texformat {
+  case 0:
+    return nil
   case 1:  // A3I5
     texpal <<= 3
     for addr in vramaddr..<vramaddr + width * height {
@@ -363,12 +433,50 @@ func realityKitModelFromRip(rip: MelonRipperRip) -> ModelComponent {
   // https://maxxfrazer.medium.com/getting-started-with-realitykit-procedural-geometries-5dd9eca659ef
   var descr = MeshDescriptor(name: "tritri")
   descr.positions = MeshBuffers.Positions(rip.verts)
+  descr.textureCoordinates = MeshBuffers.TextureCoordinates(rip.uvs)
   descr.primitives = .trianglesAndQuads(triangles: rip.facesTriangle, quads: rip.facesQuad)
+  descr.materials = .perFace(rip.faceMaterialsTriangle + rip.faceMaterialsQuad)
+  let materials = realityKitMaterialsFromRip(rip: rip)
   let modelComponent = ModelComponent(
     mesh: try! .generate(from: [descr]),
-    materials: [SimpleMaterial(color: .orange, isMetallic: false)]
+    materials: materials
   )
   return modelComponent
+}
+
+func realityKitMaterialsFromRip(rip: MelonRipperRip) -> [Material] {
+  var outputMaterials = [Material?](repeating: nil, count: rip.materials.count)
+  for (materialKey, materialIndex) in rip.materials {
+    // TODO(zhuowei): is caching necessary here?
+    outputMaterials[materialIndex] = createMaterial(
+      rip: rip, texparam: materialKey.texparam, texpal: materialKey.texpal,
+      polygonAttr: materialKey.polygonAttr)
+  }
+  return outputMaterials.map({ $0! })
+}
+
+func createMaterial(rip: MelonRipperRip, texparam: Int, texpal: Int, polygonAttr: Int) -> Material {
+  guard let decodedImage = decodeTexture(rip: rip, texparam: texparam, texpal: texpal) else {
+    return SimpleMaterial(color: .orange, isMetallic: false)
+  }
+  let cgImage = CGImage(
+    width: decodedImage.width, height: decodedImage.height, bitsPerComponent: 8, bitsPerPixel: 32,
+    bytesPerRow: decodedImage.width * 4, space: CGColorSpace(name: CGColorSpace.sRGB)!,
+    bitmapInfo: CGBitmapInfo(
+      rawValue: CGBitmapInfo.byteOrder32Big.rawValue | CGImageAlphaInfo.last.rawValue),
+    provider: CGDataProvider(data: decodedImage.pixels as CFData)!, decode: nil,
+    shouldInterpolate: false,
+    intent: .defaultIntent)!
+  let texture = MaterialParameters.Texture(
+    try! .generate(
+      from: cgImage,
+      options: TextureResource.CreateOptions(semantic: .color, mipmapsMode: .allocateAll)))
+  let color = PhysicallyBasedMaterial.BaseColor(
+    tint: .white,
+    texture: texture)
+  var material = SimpleMaterial(color: .orange, isMetallic: false)
+  material.color = color
+  return material
 }
 
 // https://github.com/LinusHenze/Fugu14/blob/7cba721b6d62555dd0c0b47416ee103ee112576e/arm/shared/JailbreakUtils/Sources/JailbreakUtils/utils.swift#LL42C1

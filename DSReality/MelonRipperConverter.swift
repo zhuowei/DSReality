@@ -89,13 +89,14 @@ func melonRipperRipFromDumpData(dump: Data) -> MelonRipperRip {
         let useToonHighlight = (blendMode == 2)
         colors.append(useToonHighlight ? 1 : 0)
         let s = dump.getGeneric(type: UInt16.self, offset: UInt(pos))
-        let t = dump.getGeneric(type: UInt16.self, offset: UInt(pos))
+        let t = dump.getGeneric(type: UInt16.self, offset: UInt(pos + 2))
         pos += 2 * 2
         // Textures are upside down in Blender, so we flip them,
         // but that means we need to flip the T coord too.
-        // zhuowei: RealityKit doesn't need to flip UVs
+        let u = Float(s) / 16 / Float(textureWidth)
+        let v = 1 - (Float(t) / 16 / Float(textureHeight))
         uvs.append(
-          SIMD2<Float>(Float(s) / 16 / Float(textureWidth), Float(t) / 16 / Float(textureHeight)))
+          SIMD2<Float>(u, v))
         if nverts == 4 {
           facesQuad.append(UInt32(vertIndex + i))
         } else {
@@ -431,14 +432,14 @@ struct MelonRipperTextureKey: Hashable {
   let texpal: Int
 }
 
-func realityKitModelFromRip(rip: MelonRipperRip) -> ModelComponent {
+func realityKitModelFromRip(rip: MelonRipperRip, textures: AllDecodedTextures) -> ModelComponent {
   // https://maxxfrazer.medium.com/getting-started-with-realitykit-procedural-geometries-5dd9eca659ef
   var descr = MeshDescriptor(name: "tritri")
   descr.positions = MeshBuffers.Positions(rip.verts)
   descr.textureCoordinates = MeshBuffers.TextureCoordinates(rip.uvs)
   descr.primitives = .trianglesAndQuads(triangles: rip.facesTriangle, quads: rip.facesQuad)
   descr.materials = .perFace(rip.faceMaterialsTriangle + rip.faceMaterialsQuad)
-  let materials = realityKitMaterialsFromRip(rip: rip)
+  let materials = realityKitMaterialsFromRip(rip: rip, textures: textures)
   let modelComponent = ModelComponent(
     mesh: try! .generate(from: [descr]),
     materials: materials
@@ -446,39 +447,58 @@ func realityKitModelFromRip(rip: MelonRipperRip) -> ModelComponent {
   return modelComponent
 }
 
-func realityKitMaterialsFromRip(rip: MelonRipperRip) -> [Material] {
+func realityKitMaterialsFromRip(rip: MelonRipperRip, textures: AllDecodedTextures) -> [Material] {
   var outputMaterials = [Material?](repeating: nil, count: rip.materials.count)
   for (materialKey, materialIndex) in rip.materials {
     // TODO(zhuowei): is caching necessary here?
     outputMaterials[materialIndex] = createMaterial(
-      rip: rip, texparam: materialKey.texparam, texpal: materialKey.texpal,
-      polygonAttr: materialKey.polygonAttr)
+      rip: rip, materialKey: materialKey, textures: textures)
   }
   return outputMaterials.map({ $0! })
 }
 
-func createMaterial(rip: MelonRipperRip, texparam: Int, texpal: Int, polygonAttr: Int) -> Material {
-  guard let decodedImage = decodeTexture(rip: rip, texparam: texparam, texpal: texpal) else {
+func createMaterial(
+  rip: MelonRipperRip, materialKey: MelonRipperMaterialArgsKey, textures: AllDecodedTextures
+) -> Material {
+  guard let cgImage = textures.textures[materialKey] else {
     return SimpleMaterial(color: .orange, isMetallic: false)
   }
-  let cgImage = CGImage(
-    width: decodedImage.width, height: decodedImage.height, bitsPerComponent: 8, bitsPerPixel: 32,
-    bytesPerRow: decodedImage.width * 4, space: CGColorSpace(name: CGColorSpace.sRGB)!,
-    bitmapInfo: CGBitmapInfo(
-      rawValue: CGBitmapInfo.byteOrder32Big.rawValue | CGImageAlphaInfo.last.rawValue),
-    provider: CGDataProvider(data: decodedImage.pixels as CFData)!, decode: nil,
-    shouldInterpolate: false,
-    intent: .defaultIntent)!
   let texture = MaterialParameters.Texture(
     try! .generate(
       from: cgImage,
-      options: TextureResource.CreateOptions(semantic: .color, mipmapsMode: .allocateAll)))
+      options: TextureResource.CreateOptions(semantic: .color, mipmapsMode: .none)))
   let color = PhysicallyBasedMaterial.BaseColor(
     tint: .white,
     texture: texture)
   var material = SimpleMaterial(color: .orange, isMetallic: false)
   material.color = color
   return material
+}
+
+struct AllDecodedTextures {
+  let textures: [MelonRipperMaterialArgsKey: CGImage]
+}
+
+func decodeTexturesFrom(rip: MelonRipperRip) -> AllDecodedTextures {
+  var textures = [MelonRipperMaterialArgsKey: CGImage]()
+  for (materialKey, _) in rip.materials {
+    guard
+      let decodedImage = decodeTexture(
+        rip: rip, texparam: materialKey.texparam, texpal: materialKey.texpal)
+    else {
+      continue
+    }
+    let cgImage = CGImage(
+      width: decodedImage.width, height: decodedImage.height, bitsPerComponent: 8, bitsPerPixel: 32,
+      bytesPerRow: decodedImage.width * 4, space: CGColorSpace(name: CGColorSpace.sRGB)!,
+      bitmapInfo: CGBitmapInfo(
+        rawValue: CGBitmapInfo.byteOrder32Big.rawValue | CGImageAlphaInfo.last.rawValue),
+      provider: CGDataProvider(data: decodedImage.pixels as CFData)!, decode: nil,
+      shouldInterpolate: false,
+      intent: .defaultIntent)!
+    textures[materialKey] = cgImage
+  }
+  return AllDecodedTextures(textures: textures)
 }
 
 // https://github.com/LinusHenze/Fugu14/blob/7cba721b6d62555dd0c0b47416ee103ee112576e/arm/shared/JailbreakUtils/Sources/JailbreakUtils/utils.swift#LL42C1

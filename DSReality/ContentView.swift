@@ -65,9 +65,11 @@ struct ARViewContainer: UIViewRepresentable {
           g_busy = false
           return
         }
+        let decodedTextures = decodeTexturesFrom(rip: melonRipperRip)
         // seriously?!
         DispatchQueue.main.async {
-          let modelComponent = realityKitModelFromRip(rip: melonRipperRip)
+          let modelComponent = realityKitModelFromRip(
+            rip: melonRipperRip, textures: decodedTextures)
           newBox.model = modelComponent
           g_busy = false
         }

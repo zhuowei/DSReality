@@ -5,10 +5,10 @@
 //  Created by Zhuowei Zhang on 2023-06-19.
 //
 
-import SwiftUI
-import RealityKit
-import MelonDSDeltaCore
 import DeltaCore
+import MelonDSDeltaCore
+import RealityKit
+import SwiftUI
 
 var emulatorCore: EmulatorCore!
 
@@ -24,37 +24,37 @@ func getOrStartEmulator() -> EmulatorCore {
   let game = Game(fileURL: documentDirectory.appendingPathComponent("mario_kart_ds.nds"), type: .ds)
   emulatorCore = EmulatorCore(game: game)
   emulatorCore.start()
-  MelonDSEmulatorBridge.shared.melonRipperRipCallbackFunction = myMelonRipperRipCallbackFunction;
+  MelonDSEmulatorBridge.shared.melonRipperRipCallbackFunction = myMelonRipperRipCallbackFunction
   return emulatorCore
 }
 
-struct ContentView : View {
-    var body: some View {
-      ZStack {
-        //ARViewContainer().edgesIgnoringSafeArea(.all)
-        GameViewContainer()
-      }
+struct ContentView: View {
+  var body: some View {
+    ZStack {
+      //ARViewContainer().edgesIgnoringSafeArea(.all)
+      GameViewContainer()
     }
+  }
 }
 
 struct ARViewContainer: UIViewRepresentable {
-    
-    func makeUIView(context: Context) -> ARView {
-              
-        let arView = ARView(frame: .zero)
-        
-        // Load the "Box" scene from the "Experience" Reality File
-        //let boxAnchor = try! Experience.loadBox()
-        
-        // Add the box anchor to the scene
-        //arView.scene.anchors.append(boxAnchor)
-        
-        return arView
-        
-    }
-    
-    func updateUIView(_ uiView: ARView, context: Context) {}
-    
+
+  func makeUIView(context: Context) -> ARView {
+
+    let arView = ARView(frame: .zero)
+
+    // Load the "Box" scene from the "Experience" Reality File
+    //let boxAnchor = try! Experience.loadBox()
+
+    // Add the box anchor to the scene
+    //arView.scene.anchors.append(boxAnchor)
+
+    return arView
+
+  }
+
+  func updateUIView(_ uiView: ARView, context: Context) {}
+
 }
 
 struct GameViewContainer: UIViewRepresentable {
@@ -68,9 +68,9 @@ struct GameViewContainer: UIViewRepresentable {
 }
 
 #if DEBUG
-struct ContentView_Previews : PreviewProvider {
+  struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+      ContentView()
     }
-}
+  }
 #endif

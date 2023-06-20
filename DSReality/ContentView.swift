@@ -33,6 +33,8 @@ struct ContentView: View {
   }
 }
 
+var g_busy: Bool = false
+
 struct ARViewContainer: UIViewRepresentable {
 
   func makeUIView(context: Context) -> ARView {
@@ -53,15 +55,21 @@ struct ARViewContainer: UIViewRepresentable {
     arView.scene.anchors.append(newAnchor)
 
     MelonDSEmulatorBridge.shared.melonRipperRipCallbackFunction = { inputData in
+      if g_busy {
+        return
+      }
+      g_busy = true
       DispatchQueue.global(qos: .userInteractive).async {
         let melonRipperRip = melonRipperRipFromDumpData(dump: inputData)
         if melonRipperRip.verts.count == 0 {
+          g_busy = false
           return
         }
         // seriously?!
         DispatchQueue.main.async {
           let modelComponent = realityKitModelFromRip(rip: melonRipperRip)
           newBox.model = modelComponent
+          g_busy = false
         }
       }
     }

@@ -119,8 +119,10 @@ func melonRipperRipFromDumpData(dump: Data) -> MelonRipperRip {
       textureWidth = 8 << ((texparam >> 20) & 7)
       textureHeight = 8 << ((texparam >> 23) & 7)
     case "TPLT":
+      texpal = Int(dump.getGeneric(type: Int32.self, offset: UInt(pos)))
       pos += 4
     case "PATR":
+      polygonAttr = Int(dump.getGeneric(type: Int32.self, offset: UInt(pos)))
       pos += 4
     case "VRAM":
       let vramMapTexture = dump.getGeneric(type: Vector4ui.self, offset: UInt(pos)).toArray()
@@ -342,12 +344,12 @@ func decodeTexture(rip: MelonRipperRip, texparam: Int, texpal: Int) -> MelonRipp
         blockColor[3] = 0
 
       } else {
-        let r0 = col0 & 0x001F
-        let g0 = col0 & 0x03E0
-        let b0 = col0 & 0x7C00
-        let r1 = col1 & 0x001F
-        let g1 = col1 & 0x03E0
-        let b1 = col1 & 0x7C00
+        let r0 = Int(col0 & 0x001F)
+        let g0 = Int(col0 & 0x03E0)
+        let b0 = Int(col0 & 0x7C00)
+        let r1 = Int(col1 & 0x001F)
+        let g1 = Int(col1 & 0x03E0)
+        let b1 = Int(col1 & 0x7C00)
 
         let r2 = (r0 * 5 + r1 * 3) >> 3
         let g2 = ((g0 * 5 + g1 * 3) >> 3) & 0x03E0
@@ -357,8 +359,8 @@ func decodeTexture(rip: MelonRipperRip, texparam: Int, texpal: Int) -> MelonRipp
         let g3 = ((g0 * 3 + g1 * 5) >> 3) & 0x03E0
         let b3 = ((b0 * 3 + b1 * 5) >> 3) & 0x7C00
 
-        blockColor[2] = r2 | g2 | b2
-        blockColor[3] = r3 | g3 | b3
+        blockColor[2] = UInt16(r2 | g2 | b2)
+        blockColor[3] = UInt16(r3 | g3 | b3)
       }
 
       // Read block of 4x4 pixels at addr
@@ -401,7 +403,7 @@ func decodeTexture(rip: MelonRipperRip, texparam: Int, texpal: Int) -> MelonRipp
   // Also reverse the rows so the image is right-side-up
   // zhuowei: use 8-bit instead
   var pixels = Data(capacity: width * height * 4)
-  for t in stride(from: height - 1, to: -1, by: -1) {
+  for t in 0..<height {
     for i in t * width..<(t + 1) * width {
       let c = Int(color[i])
       let a = Int(alpha[i])

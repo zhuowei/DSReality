@@ -12,6 +12,9 @@ import DeltaCore
 
 var emulatorCore: EmulatorCore!
 
+func myMelonRipperRipCallbackFunction(data: Data) {
+}
+
 func getOrStartEmulator() -> EmulatorCore {
   if let emulatorCore = emulatorCore {
     return emulatorCore
@@ -21,6 +24,7 @@ func getOrStartEmulator() -> EmulatorCore {
   let game = Game(fileURL: documentDirectory.appendingPathComponent("mario_kart_ds.nds"), type: .ds)
   emulatorCore = EmulatorCore(game: game)
   emulatorCore.start()
+  MelonDSEmulatorBridge.shared.melonRipperRipCallbackFunction = myMelonRipperRipCallbackFunction;
   return emulatorCore
 }
 

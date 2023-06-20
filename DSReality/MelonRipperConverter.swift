@@ -1,6 +1,7 @@
 import CoreGraphics
 import Foundation
 import RealityKit
+import CryptoKit
 
 struct Vector3i {
   let x, y, z: Int32
@@ -208,6 +209,10 @@ struct MelonRipperDecodedTexture {
   let width: Int
   let height: Int
   let isOpaque: Bool
+  func getIdentifier() -> String {
+    let pixelhash = SHA256.hash(data: pixels)
+    return String(format: "\(width):\(height):\(pixelhash.description)")
+  }
 }
 
 func decodeTexture(rip: MelonRipperRip, texparam: Int, texpal: Int) -> MelonRipperDecodedTexture? {
@@ -432,6 +437,8 @@ struct MelonRipperTextureKey: Hashable {
   let texpal: Int
 }
 
+var g_materialCache = [String: Material]()
+
 func realityKitModelFromRip(rip: MelonRipperRip, textures: AllDecodedTextures) -> ModelComponent {
   // https://maxxfrazer.medium.com/getting-started-with-realitykit-procedural-geometries-5dd9eca659ef
   var descr = MeshDescriptor(name: "tritri")
@@ -460,27 +467,35 @@ func realityKitMaterialsFromRip(rip: MelonRipperRip, textures: AllDecodedTexture
 func createMaterial(
   rip: MelonRipperRip, materialKey: MelonRipperMaterialArgsKey, textures: AllDecodedTextures
 ) -> Material {
-  guard let cgImage = textures.textures[materialKey] else {
+  guard let decodedTexture = textures.textures[materialKey] else {
     return SimpleMaterial(color: .orange, isMetallic: false)
+  }
+  if let material = g_materialCache[decodedTexture.identifier] {
+    return material
   }
   let texture = MaterialParameters.Texture(
     try! .generate(
-      from: cgImage,
+      from: decodedTexture.cgImage,
       options: TextureResource.CreateOptions(semantic: .color, mipmapsMode: .none)))
   let color = PhysicallyBasedMaterial.BaseColor(
     tint: .white,
     texture: texture)
   var material = SimpleMaterial(color: .orange, isMetallic: false)
   material.color = color
+  g_materialCache[decodedTexture.identifier] = material
   return material
 }
 
 struct AllDecodedTextures {
-  let textures: [MelonRipperMaterialArgsKey: CGImage]
+  struct DecodedTexture{
+    let cgImage: CGImage
+    let identifier: String
+  }
+  let textures: [MelonRipperMaterialArgsKey: DecodedTexture]
 }
 
 func decodeTexturesFrom(rip: MelonRipperRip) -> AllDecodedTextures {
-  var textures = [MelonRipperMaterialArgsKey: CGImage]()
+  var textures = [MelonRipperMaterialArgsKey: AllDecodedTextures.DecodedTexture]()
   for (materialKey, _) in rip.materials {
     guard
       let decodedImage = decodeTexture(
@@ -496,7 +511,7 @@ func decodeTexturesFrom(rip: MelonRipperRip) -> AllDecodedTextures {
       provider: CGDataProvider(data: decodedImage.pixels as CFData)!, decode: nil,
       shouldInterpolate: false,
       intent: .defaultIntent)!
-    textures[materialKey] = cgImage
+    textures[materialKey] = AllDecodedTextures.DecodedTexture(cgImage: cgImage, identifier: decodedImage.getIdentifier())
   }
   return AllDecodedTextures(textures: textures)
 }

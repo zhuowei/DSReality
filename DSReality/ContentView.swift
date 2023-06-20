@@ -12,9 +12,6 @@ import SwiftUI
 
 var emulatorCore: EmulatorCore!
 
-func myMelonRipperRipCallbackFunction(data: Data) {
-}
-
 func getOrStartEmulator() -> EmulatorCore {
   if let emulatorCore = emulatorCore {
     return emulatorCore
@@ -24,15 +21,14 @@ func getOrStartEmulator() -> EmulatorCore {
   let game = Game(fileURL: documentDirectory.appendingPathComponent("mario_kart_ds.nds"), type: .ds)
   emulatorCore = EmulatorCore(game: game)
   emulatorCore.start()
-  MelonDSEmulatorBridge.shared.melonRipperRipCallbackFunction = myMelonRipperRipCallbackFunction
   return emulatorCore
 }
 
 struct ContentView: View {
   var body: some View {
-    ZStack {
-      //ARViewContainer().edgesIgnoringSafeArea(.all)
-      GameViewContainer()
+    ZStack(alignment: .topLeading) {
+      ARViewContainer().edgesIgnoringSafeArea(.all)
+      GameViewContainer().frame(width: 256, height: 192 * 2)
     }
   }
 }
@@ -48,6 +44,27 @@ struct ARViewContainer: UIViewRepresentable {
 
     // Add the box anchor to the scene
     //arView.scene.anchors.append(boxAnchor)
+
+    let newAnchor = AnchorEntity(world: [0, 0, -1])
+    let newBox = ModelEntity()
+    newBox.transform.scale = SIMD3<Float>(repeating: 0.5)
+    // newBox.transform.rotation = simd_quatf(angle: Float.pi, axis: SIMD3<Float>(0, 1, 0))
+    newAnchor.addChild(newBox)
+    arView.scene.anchors.append(newAnchor)
+
+    MelonDSEmulatorBridge.shared.melonRipperRipCallbackFunction = { inputData in
+      DispatchQueue.global(qos: .userInteractive).async {
+        let melonRipperRip = melonRipperRipFromDumpData(dump: inputData)
+        if melonRipperRip.verts.count == 0 {
+          return
+        }
+        // seriously?!
+        DispatchQueue.main.async {
+          let modelComponent = realityKitModelFromRip(rip: melonRipperRip)
+          newBox.model = modelComponent
+        }
+      }
+    }
 
     return arView
 

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C5BD57C82A413668008D26EC /* MelonRipperConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5BD57C72A413667008D26EC /* MelonRipperConverter.swift */; };
 		C5E32BA12A40F64E00D11A93 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E32BA02A40F64E00D11A93 /* AppDelegate.swift */; };
 		C5E32BA32A40F64E00D11A93 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E32BA22A40F64E00D11A93 /* ContentView.swift */; };
 		C5E32BA52A40F64E00D11A93 /* Experience.rcproject in Sources */ = {isa = PBXBuildFile; fileRef = C5E32BA42A40F64E00D11A93 /* Experience.rcproject */; };
@@ -21,6 +22,7 @@
 		C11FAA69CE973A7E07EB31F5 /* libPods-DSReality.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DSReality.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C55605072A40FD0C00E25804 /* DSReality.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DSReality.entitlements; sourceTree = "<group>"; };
 		C5BD57C62A4119D4008D26EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		C5BD57C72A413667008D26EC /* MelonRipperConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MelonRipperConverter.swift; sourceTree = "<group>"; };
 		C5E32B9D2A40F64E00D11A93 /* DSReality.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DSReality.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C5E32BA02A40F64E00D11A93 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C5E32BA22A40F64E00D11A93 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -83,6 +85,7 @@
 				C55605072A40FD0C00E25804 /* DSReality.entitlements */,
 				C5E32BA02A40F64E00D11A93 /* AppDelegate.swift */,
 				C5E32BA22A40F64E00D11A93 /* ContentView.swift */,
+				C5BD57C72A413667008D26EC /* MelonRipperConverter.swift */,
 				C5E32BA42A40F64E00D11A93 /* Experience.rcproject */,
 				C5E32BA62A40F65400D11A93 /* Assets.xcassets */,
 				C5E32BA82A40F65400D11A93 /* Preview Content */,
@@ -214,6 +217,7 @@
 			files = (
 				C5E32BA32A40F64E00D11A93 /* ContentView.swift in Sources */,
 				C5E32BA12A40F64E00D11A93 /* AppDelegate.swift in Sources */,
+				C5BD57C82A413668008D26EC /* MelonRipperConverter.swift in Sources */,
 				C5E32BA52A40F64E00D11A93 /* Experience.rcproject in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

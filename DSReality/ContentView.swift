@@ -5,6 +5,7 @@
 //  Created by Zhuowei Zhang on 2023-06-19.
 //
 
+import ARKit
 import DeltaCore
 import MelonDSDeltaCore
 import RealityKit
@@ -20,15 +21,27 @@ func getOrStartEmulator() -> EmulatorCore {
   let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
   let game = Game(fileURL: documentDirectory.appendingPathComponent("mario_kart_ds.nds"), type: .ds)
   emulatorCore = EmulatorCore(game: game)
+  // https://github.com/rileytestut/Delta/blob/7f79e1d3a6bb1f1fa49d39099093c25f749e19ee/Delta/Emulation/GameViewController.swift#LL201C1-L202C1
+  NotificationCenter.default.addObserver(
+    forName: .externalGameControllerDidConnect, object: nil, queue: nil
+  ) { notification in
+    let controllers = ExternalGameControllerManager.shared.connectedControllers
+    if controllers.count == 0 {
+      return
+    }
+    controllers[0].removeReceiver(emulatorCore)
+    controllers[0].addReceiver(emulatorCore)
+  }
+  ExternalGameControllerManager.shared.startMonitoring()
   emulatorCore.start()
   return emulatorCore
 }
 
 struct ContentView: View {
   var body: some View {
-    ZStack(alignment: .topLeading) {
-      ARViewContainer().edgesIgnoringSafeArea(.all)
+    HStack {
       GameViewContainer().frame(width: 256, height: 192 * 2)
+      ARViewContainer().edgesIgnoringSafeArea(.all)
     }
   }
 }

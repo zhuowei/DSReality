@@ -1,7 +1,7 @@
 import CoreGraphics
+import CryptoKit
 import Foundation
 import RealityKit
-import CryptoKit
 
 struct Vector3i {
   let x, y, z: Int32
@@ -437,7 +437,7 @@ struct MelonRipperTextureKey: Hashable {
   let texpal: Int
 }
 
-var g_materialCache = [String: Material]()
+var g_materialCache = LRUCache<String, Material>(countLimit: 1000)
 
 func realityKitModelFromRip(rip: MelonRipperRip, textures: AllDecodedTextures) -> ModelComponent {
   // https://maxxfrazer.medium.com/getting-started-with-realitykit-procedural-geometries-5dd9eca659ef
@@ -470,7 +470,7 @@ func createMaterial(
   guard let decodedTexture = textures.textures[materialKey] else {
     return SimpleMaterial(color: .orange, isMetallic: false)
   }
-  if let material = g_materialCache[decodedTexture.identifier] {
+  if let material = g_materialCache.value(forKey: decodedTexture.identifier) {
     return material
   }
   let texture = MaterialParameters.Texture(
@@ -482,12 +482,12 @@ func createMaterial(
     texture: texture)
   var material = SimpleMaterial(color: .orange, isMetallic: false)
   material.color = color
-  g_materialCache[decodedTexture.identifier] = material
+  g_materialCache.setValue(material, forKey: decodedTexture.identifier)
   return material
 }
 
 struct AllDecodedTextures {
-  struct DecodedTexture{
+  struct DecodedTexture {
     let cgImage: CGImage
     let identifier: String
   }
@@ -511,7 +511,8 @@ func decodeTexturesFrom(rip: MelonRipperRip) -> AllDecodedTextures {
       provider: CGDataProvider(data: decodedImage.pixels as CFData)!, decode: nil,
       shouldInterpolate: false,
       intent: .defaultIntent)!
-    textures[materialKey] = AllDecodedTextures.DecodedTexture(cgImage: cgImage, identifier: decodedImage.getIdentifier())
+    textures[materialKey] = AllDecodedTextures.DecodedTexture(
+      cgImage: cgImage, identifier: decodedImage.getIdentifier())
   }
   return AllDecodedTextures(textures: textures)
 }

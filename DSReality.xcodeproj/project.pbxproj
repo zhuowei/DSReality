@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C54343152A41701A00451B10 /* LRUCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54343142A41701A00451B10 /* LRUCache.swift */; };
 		C5BD57C82A413668008D26EC /* MelonRipperConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5BD57C72A413667008D26EC /* MelonRipperConverter.swift */; };
 		C5E32BA12A40F64E00D11A93 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E32BA02A40F64E00D11A93 /* AppDelegate.swift */; };
 		C5E32BA32A40F64E00D11A93 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E32BA22A40F64E00D11A93 /* ContentView.swift */; };
@@ -20,6 +21,7 @@
 		96A29DC7E9B8E3ED47FAABE9 /* Pods-DSReality.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DSReality.release.xcconfig"; path = "Target Support Files/Pods-DSReality/Pods-DSReality.release.xcconfig"; sourceTree = "<group>"; };
 		B587B1A35CDDE36DA6FB4A75 /* Pods-DSReality.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DSReality.debug.xcconfig"; path = "Target Support Files/Pods-DSReality/Pods-DSReality.debug.xcconfig"; sourceTree = "<group>"; };
 		C11FAA69CE973A7E07EB31F5 /* libPods-DSReality.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DSReality.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C54343142A41701A00451B10 /* LRUCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LRUCache.swift; sourceTree = "<group>"; };
 		C55605072A40FD0C00E25804 /* DSReality.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DSReality.entitlements; sourceTree = "<group>"; };
 		C5BD57C62A4119D4008D26EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C5BD57C72A413667008D26EC /* MelonRipperConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MelonRipperConverter.swift; sourceTree = "<group>"; };
@@ -86,6 +88,7 @@
 				C5E32BA02A40F64E00D11A93 /* AppDelegate.swift */,
 				C5E32BA22A40F64E00D11A93 /* ContentView.swift */,
 				C5BD57C72A413667008D26EC /* MelonRipperConverter.swift */,
+				C54343142A41701A00451B10 /* LRUCache.swift */,
 				C5E32BA42A40F64E00D11A93 /* Experience.rcproject */,
 				C5E32BA62A40F65400D11A93 /* Assets.xcassets */,
 				C5E32BA82A40F65400D11A93 /* Preview Content */,
@@ -219,6 +222,7 @@
 				C5E32BA12A40F64E00D11A93 /* AppDelegate.swift in Sources */,
 				C5BD57C82A413668008D26EC /* MelonRipperConverter.swift in Sources */,
 				C5E32BA52A40F64E00D11A93 /* Experience.rcproject in Sources */,
+				C54343152A41701A00451B10 /* LRUCache.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

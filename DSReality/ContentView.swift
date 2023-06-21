@@ -19,7 +19,7 @@ func getOrStartEmulator() -> EmulatorCore {
   }
   Delta.register(MelonDS.core)
   let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-  let game = Game(fileURL: documentDirectory.appendingPathComponent("mario_kart_ds.nds"), type: .ds)
+  let game = Game(fileURL: documentDirectory.appendingPathComponent("rom.nds"), type: .ds)
   emulatorCore = EmulatorCore(game: game)
   // https://github.com/rileytestut/Delta/blob/7f79e1d3a6bb1f1fa49d39099093c25f749e19ee/Delta/Emulation/GameViewController.swift#LL201C1-L202C1
   NotificationCenter.default.addObserver(

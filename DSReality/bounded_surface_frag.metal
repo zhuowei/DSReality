@@ -55,6 +55,7 @@ void boundedSurface(realitykit::surface_parameters params)
     float3 divided_position_abs = abs(divided_position);
     if (divided_position_abs.x > 20 || divided_position.y < -10 || divided_position.y > 20|| -model_position.z < 0 || -model_position.z > 200) {
         // Yes, I know this is bad for performance
+        // these positions only work for Mario Kart DS; for others, comment this out
         discard_fragment();
     }
 }

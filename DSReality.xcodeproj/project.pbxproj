@@ -14,6 +14,7 @@
 		C5E32BA52A40F64E00D11A93 /* Experience.rcproject in Sources */ = {isa = PBXBuildFile; fileRef = C5E32BA42A40F64E00D11A93 /* Experience.rcproject */; };
 		C5E32BA72A40F65400D11A93 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C5E32BA62A40F65400D11A93 /* Assets.xcassets */; };
 		C5E32BAA2A40F65400D11A93 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C5E32BA92A40F65400D11A93 /* Preview Assets.xcassets */; };
+		C5E989682A430AC800316302 /* bounded_surface_frag.metal in Sources */ = {isa = PBXBuildFile; fileRef = C5E989672A430AC800316302 /* bounded_surface_frag.metal */; };
 		EDEF972952BDDBCE32845F59 /* libPods-DSReality.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C11FAA69CE973A7E07EB31F5 /* libPods-DSReality.a */; };
 /* End PBXBuildFile section */
 
@@ -31,6 +32,7 @@
 		C5E32BA42A40F64E00D11A93 /* Experience.rcproject */ = {isa = PBXFileReference; lastKnownFileType = file.rcproject; path = Experience.rcproject; sourceTree = "<group>"; };
 		C5E32BA62A40F65400D11A93 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C5E32BA92A40F65400D11A93 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		C5E989672A430AC800316302 /* bounded_surface_frag.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = bounded_surface_frag.metal; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +91,7 @@
 				C5E32BA22A40F64E00D11A93 /* ContentView.swift */,
 				C5BD57C72A413667008D26EC /* MelonRipperConverter.swift */,
 				C54343142A41701A00451B10 /* LRUCache.swift */,
+				C5E989672A430AC800316302 /* bounded_surface_frag.metal */,
 				C5E32BA42A40F64E00D11A93 /* Experience.rcproject */,
 				C5E32BA62A40F65400D11A93 /* Assets.xcassets */,
 				C5E32BA82A40F65400D11A93 /* Preview Content */,
@@ -221,6 +224,7 @@
 				C5E32BA32A40F64E00D11A93 /* ContentView.swift in Sources */,
 				C5E32BA12A40F64E00D11A93 /* AppDelegate.swift in Sources */,
 				C5BD57C82A413668008D26EC /* MelonRipperConverter.swift in Sources */,
+				C5E989682A430AC800316302 /* bounded_surface_frag.metal in Sources */,
 				C5E32BA52A40F64E00D11A93 /* Experience.rcproject in Sources */,
 				C54343152A41701A00451B10 /* LRUCache.swift in Sources */,
 			);

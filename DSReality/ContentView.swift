@@ -62,7 +62,7 @@ struct ARViewContainer: UIViewRepresentable {
 
     let newAnchor = AnchorEntity(world: [0, 0, -1])
     let newBox = ModelEntity()
-    newBox.transform.scale = SIMD3<Float>(repeating: 0.5)
+    newBox.transform.scale = SIMD3<Float>(repeating: 0.1)
     // newBox.transform.rotation = simd_quatf(angle: Float.pi, axis: SIMD3<Float>(0, 1, 0))
     newAnchor.addChild(newBox)
     arView.scene.anchors.append(newAnchor)

@@ -2,6 +2,15 @@ import CoreGraphics
 import CryptoKit
 import Foundation
 import RealityKit
+import Metal
+
+let gMaterialShader = getMaterialShader()
+
+func getMaterialShader() -> CustomMaterial.SurfaceShader {
+  let library = MTLCreateSystemDefaultDevice()!.makeDefaultLibrary()!
+  return CustomMaterial.SurfaceShader(named: "boundedSurface",
+                                                         in: library)
+}
 
 struct Vector3i {
   let x, y, z: Int32
@@ -480,8 +489,9 @@ func createMaterial(
   let color = PhysicallyBasedMaterial.BaseColor(
     tint: .white,
     texture: texture)
-  var material = SimpleMaterial(color: .orange, isMetallic: false)
-  material.color = color
+  var materialBase = SimpleMaterial(color: .orange, isMetallic: false)
+  materialBase.color = color
+  let material = try! CustomMaterial(from: materialBase, surfaceShader: gMaterialShader)
   g_materialCache.setValue(material, forKey: decodedTexture.identifier)
   return material
 }

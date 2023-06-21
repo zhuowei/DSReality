@@ -446,7 +446,7 @@ struct MelonRipperTextureKey: Hashable {
   let texpal: Int
 }
 
-var g_materialCache = LRUCache<String, Material>(countLimit: 1000)
+var g_materialCache = LRUCache<String, Material>(countLimit: 10000)
 
 func realityKitModelFromRip(rip: MelonRipperRip, textures: AllDecodedTextures) -> ModelComponent {
   // https://maxxfrazer.medium.com/getting-started-with-realitykit-procedural-geometries-5dd9eca659ef
@@ -489,7 +489,7 @@ func createMaterial(
   let color = PhysicallyBasedMaterial.BaseColor(
     tint: .white,
     texture: texture)
-  var materialBase = SimpleMaterial(color: .orange, isMetallic: false)
+  var materialBase = SimpleMaterial(color: .orange, roughness: 1.0, isMetallic: false)
   materialBase.color = color
   let material = try! CustomMaterial(from: materialBase, surfaceShader: gMaterialShader)
   g_materialCache.setValue(material, forKey: decodedTexture.identifier)
@@ -517,7 +517,7 @@ func decodeTexturesFrom(rip: MelonRipperRip) -> AllDecodedTextures {
       width: decodedImage.width, height: decodedImage.height, bitsPerComponent: 8, bitsPerPixel: 32,
       bytesPerRow: decodedImage.width * 4, space: CGColorSpace(name: CGColorSpace.sRGB)!,
       bitmapInfo: CGBitmapInfo(
-        rawValue: CGBitmapInfo.byteOrder32Big.rawValue | CGImageAlphaInfo.last.rawValue),
+        rawValue: CGBitmapInfo.byteOrder32Big.rawValue | CGImageAlphaInfo.premultipliedLast.rawValue),
       provider: CGDataProvider(data: decodedImage.pixels as CFData)!, decode: nil,
       shouldInterpolate: false,
       intent: .defaultIntent)!

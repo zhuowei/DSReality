@@ -60,13 +60,19 @@ struct ARViewContainer: UIViewRepresentable {
     // Add the box anchor to the scene
     //arView.scene.anchors.append(boxAnchor)
 
-    let newAnchor = AnchorEntity(world: [0, 0, -1])
+    //let newAnchor = AnchorEntity(world: [0, 1, 0])
+    let newAnchor = AnchorEntity(.image(group: "AR Resources", name: "ZhuoweiNotnowDev"))
     let newBox = ModelEntity()
-    newBox.transform.scale = SIMD3<Float>(repeating: 0.1)
-    // newBox.transform.rotation = simd_quatf(angle: Float.pi, axis: SIMD3<Float>(0, 1, 0))
+    newBox.transform.scale = SIMD3<Float>(repeating: 1)
+    newBox.transform.rotation = simd_quatf(angle: 6*Float.pi/4, axis: SIMD3<Float>(1, 0, 0))
+    newBox.transform.translation = SIMD3<Float>(0, 2, -5)
     newAnchor.addChild(newBox)
     arView.scene.anchors.append(newAnchor)
-
+    let modelComponent = ModelComponent(
+      mesh: .generateBox(size: 100),
+      materials: [SimpleMaterial(color: .orange, isMetallic: false)]
+    )
+    newBox.model = modelComponent
     MelonDSEmulatorBridge.shared.melonRipperRipCallbackFunction = { inputData in
       if g_busy {
         return
